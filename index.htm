@@ -76,6 +76,7 @@ http://desandro.github.io/3dtransforms/docs/cube.html
 			
 			var chart;
 			var lastTimeStamp = 0;
+			var dataLen = 100;
 			
 			function requestData() {
 				$.ajax({
@@ -85,12 +86,28 @@ http://desandro.github.io/3dtransforms/docs/cube.html
 						if (lastTimeStamp != result[0]) {
 							// add the point
 							var series = chart.series[0]
-							var shift = series.data.length > 200;
+							var shift = series.data.length > dataLen;
 							chart.series[0].addPoint(result, true, shift);
 
 							// Now we find the angles from the three weights.
 							// First we find the magnitude:
-							console.log(result)
+							var _x = result[2];
+							var _y = result[3];
+							var _z = result[4];
+							_magnitude = Math.pow(_x, 2) + Math.pow(_y, 2) + Math.pow(_z, 2);
+							console.log(result);
+							console.log(magnitude);
+							_ax = Math.acos(_x/magnitude);
+							_ay = Math.acos(_y/magnitude);
+							_az = Math.acos(_z/magnitude);
+							console.log(_ax)
+							console.log(_ay)
+							console.log(_az)
+							if (isNaN(_ax) || isNaN(_ay) || isNaN(_az)){
+								return;
+							}
+
+							$("#cube").transition({rotateX: _ax + 'rad', rotateY: _ay + 'rad', rotateZ: _az + 'rad'}, 1000, linear);
 						}
 						// call it again after one second
 						setTimeout(requestData, 1000);	
