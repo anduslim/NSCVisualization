@@ -82,12 +82,15 @@ http://desandro.github.io/3dtransforms/docs/cube.html
 					url: 'fetch-from-mysql.php',
 					success: function(point) {
 						var result = eval(point);
-						if (lastTimeStamp == 0) { lastTimeStamp = result[0] }
 						if (lastTimeStamp != result[0]) {
 							// add the point
 							var series = chart.series[0]
 							var shift = series.data.length > 200;
 							chart.series[0].addPoint(result, true, shift);
+
+							// Now we find the angles from the three weights.
+							// First we find the magnitude:
+							console.log(result)
 						}
 						// call it again after one second
 						setTimeout(requestData, 1000);	
