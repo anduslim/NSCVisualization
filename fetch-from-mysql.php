@@ -20,7 +20,7 @@
 	// display information: 
 	while($row = mysqli_fetch_array($result)) { 
 		//echo $row["TimeStamp"] . " " . $row["SensorReading1"] . "<br>";
-		$ret =  array((int)$row["TimeStamp"] * 1000, (float)$row["SensorReading1"]);
+		$ret =  array((int)$row["TimeStamp"] * 1000, (float)$row["SensorReading1"], (float)$row["SensorAccX"], (float)$row["SensorAccY"], (float)$row["SensorAccZ"]);
 	}
 
 	//echo count($ret) . "<br>";
