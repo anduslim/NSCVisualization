@@ -108,9 +108,8 @@ http://desandro.github.io/3dtransforms/docs/cube.html
 							magnitude = Math.pow(Math.pow(_x, 2) + Math.pow(_y, 2) + Math.pow(_z, 2), 0.5);
 							//console.log(result);
 							//console.log(magnitude);
-							_ax = Math.acos(_x/magnitude);
-							_ay = Math.acos(_y/magnitude);
-							_az = Math.acos(_z/magnitude);
+							_az = Math.atan(_y/_x);
+							_ay = Math.acos(_z/magnitude);
 							//console.log(_ax)
 							//console.log(_ay)
 							//console.log(_az)
@@ -118,7 +117,7 @@ http://desandro.github.io/3dtransforms/docs/cube.html
 								return;
 							}
 
-							$("#cube").transition({rotateX: _ax + 'rad', rotateY: _ay + 'rad', rotateZ: _az + 'rad'}, 1000, 'linear');
+							$("#cube").transition({rotateY: _ay + 'rad', rotateZ: _az + 'rad'}, 1000, 'linear');
 						}
 						// call it again after one second
 						setTimeout(requestData, 1000);	
