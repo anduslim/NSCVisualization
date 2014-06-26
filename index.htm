@@ -94,7 +94,7 @@ http://desandro.github.io/3dtransforms/docs/cube.html
 							var _x = result[2];
 							var _y = result[3];
 							var _z = result[4];
-							magnitude = Math.pow(_x, 2) + Math.pow(_y, 2) + Math.pow(_z, 2);
+							magnitude = Math.pow(Math.pow(_x, 2) + Math.pow(_y, 2) + Math.pow(_z, 2), 0.5);
 							console.log(result);
 							console.log(magnitude);
 							_ax = Math.acos(_x/magnitude);
