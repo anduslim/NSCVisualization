@@ -39,7 +39,7 @@ http://desandro.github.io/3dtransforms/docs/cube.html
 			position: relative;
 			perspective: 1000px;
   			float: right;
-  			background: #CCC;
+  			background: #FFF;
 		}
 
 		#cube {
@@ -69,6 +69,18 @@ http://desandro.github.io/3dtransforms/docs/cube.html
 		#cube .top    { transform: rotateX(  90deg ) translateZ( 100px ); background: rgba(255,189,216, 0.8) }
 		#cube .bottom { transform: rotateX( -90deg ) translateZ( 100px ); background: rgba(255,252,221, 0.8) }
 
+		/* Branding */
+		#branding {
+			position: absolute;
+			right: 10px;
+			top: 10px;
+			z-index: 1000;
+		}
+
+		#branding img {
+			height: 60px;
+		}
+		
 		</style>
 
 		<script type="text/javascript">
@@ -94,14 +106,14 @@ http://desandro.github.io/3dtransforms/docs/cube.html
 							var _y = result[3];
 							var _z = result[4];
 							magnitude = Math.pow(Math.pow(_x, 2) + Math.pow(_y, 2) + Math.pow(_z, 2), 0.5);
-							console.log(result);
-							console.log(magnitude);
+							//console.log(result);
+							//console.log(magnitude);
 							_ax = Math.acos(_x/magnitude);
 							_ay = Math.acos(_y/magnitude);
 							_az = Math.acos(_z/magnitude);
-							console.log(_ax)
-							console.log(_ay)
-							console.log(_az)
+							//console.log(_ax)
+							//console.log(_ay)
+							//console.log(_az)
 							if (isNaN(_ax) || isNaN(_ay) || isNaN(_az)){
 								return;
 							}
@@ -172,5 +184,6 @@ http://desandro.github.io/3dtransforms/docs/cube.html
 				<figure class="bottom">6</figure>
 			</div>
 		</div>		
+		<div id="branding"><img src="sns-logo.svg" alt="snslogo"/></div>
 	</body>
 </html>
