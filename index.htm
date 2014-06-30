@@ -106,13 +106,13 @@ http://desandro.github.io/3dtransforms/docs/cube.html
 							var _y = result[3];
 							var _z = result[4];
 							magnitude = Math.pow(Math.pow(_x, 2) + Math.pow(_y, 2) + Math.pow(_z, 2), 0.5);
-							//console.log(result);
-							//console.log(magnitude);
+							console.log(result);
+							console.log(magnitude);
 							_az = Math.atan(_y/_x);
 							_ay = Math.acos(_z/magnitude);
 							//console.log(_ax)
-							//console.log(_ay)
-							//console.log(_az)
+							console.log(_ay)
+							console.log(_az)
 							if (isNaN(_ay) || isNaN(_az)){
 								return;
 							}
