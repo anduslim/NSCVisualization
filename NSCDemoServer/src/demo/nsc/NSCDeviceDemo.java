@@ -7,9 +7,8 @@ package demo.nsc;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
-import jssc.SerialPort;
-import jssc.SerialPortException;
 
 /**
  *
@@ -17,50 +16,53 @@ import jssc.SerialPortException;
  */
 public class NSCDeviceDemo {
 
-    private static String DEFAULT_TTY_PORT = "/dev/ttyUSB0";
-    private static int DEFAULT_BAUD = 57600;
+    private static final String DEFAULT_TTY_PORT = "/dev/ttyUSB0";
+    private static final String DEFAULT_ELF = "./nsc_gateway_64.elf";
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         String portName;
-        int baud = DEFAULT_BAUD;
+        String elfName;
         if (args.length == 0) {
             System.out.println("Defaulting to " + DEFAULT_TTY_PORT);
             portName = DEFAULT_TTY_PORT;
         } else {
             portName = args[0];
-            if (args.length > 1) {
-                baud = Integer.decode(args[1]);
-            }
+        }
+
+        if (args.length < 2) {
+            System.out.println("Default reader " + DEFAULT_ELF);
+            elfName = DEFAULT_ELF;
+        } else {
+            elfName = args[1];
         }
 
         try {
-            SerialPort serialPort;
-            serialPort = new SerialPort(portName);
-            serialPort.openPort();
-            serialPort.setParams(baud, 8, 1, 0);
-            serialPort.setEventsMask(SerialPort.MASK_RXCHAR);
-            //Add an interface through which we will receive information about events
-            serialPort.addEventListener(new SerialPortReader(serialPort));
+            Process process = new ProcessBuilder(elfName, portName).start();
+            BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String in;
 
             WSServer _server = new WSServer(18823);
             _server.start();
-            BufferedReader sysin = new BufferedReader(new InputStreamReader(System.in));
             while (true) {
-                String in = sysin.readLine();
-                if (in.equals("quit")) {
+                in = br.readLine();
+                
+                if(in == null){
+                    System.out.println("EOF");
                     _server.stop();
-                    serialPort.closePort();
                     break;
                 }
+                
+                if (!in.isEmpty() && !in.startsWith("#")) {
+                    _server.sendAll(in);
+                    System.out.println(in);
+                }
             }
-        } catch (IOException | InterruptedException | SerialPortException ex) {
+        } catch (IOException | InterruptedException ex) {
             ex.printStackTrace();
         }
 
     }
-
-
 }
