@@ -88,6 +88,48 @@ http://desandro.github.io/3dtransforms/docs/cube.html
 			var chart;
 			var lastTimeStamp = 0;
 			var dataLen = 100;
+
+			$(document).ready(function() {
+			    // Add the WebSocket connection first:
+			    if (window.WebSocket && window.DeviceOrientationEvent && navigator.vibrate && localStorage) {
+
+			        if(!localStorage.dUUID){
+				    localStorage.dUUID = generateUUID();
+				}
+				
+			        deviceUUID = localStorage.dUUID;
+				
+			        ws = constructWebsocket();
+			        window.addEventListener("deviceorientation", handleOrientation, true);
+			    } else {
+			        alert("Your Browser does not support the necessary APIs");
+			    }
+			});
+
+			function constructWebsocket() {
+			    var ws = new WebSocket("ws://" + window.location.hostname + ":18823/");
+			    ws.onopen = function() {
+			        
+			    };
+
+			    // Log errors
+			    ws.onerror = function(error) {
+			        ws.close();
+			        $("#out").html("Error, retrying...");
+			        constructWebsocket(); // Reopen connection
+			    };
+
+			    ws.onclose = function(error) {
+			        $("#out").html("Closed, retrying...");
+			        constructWebsocket(); // Reopen connection
+			    };
+
+			    // Log messages from the server
+			    ws.onmessage = function(e) {
+			        console.log('Server: ' + e.data);
+			        var data = e.data.split(",");
+			    }
+			}
 			
 			function requestData() {
 				$.ajax({
