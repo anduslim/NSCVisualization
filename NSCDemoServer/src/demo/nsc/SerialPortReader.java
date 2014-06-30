@@ -7,6 +7,7 @@
 package demo.nsc;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import jssc.SerialPort;
 import jssc.SerialPortEvent;
 import jssc.SerialPortEventListener;
@@ -17,10 +18,10 @@ import jssc.SerialPortException;
  * @author user
  */
 class SerialPortReader implements SerialPortEventListener {
-    ByteBuffer currBuffer = ByteBuffer.allocateDirect(100);
+    ByteBuffer currBuffer = ByteBuffer.allocateDirect(DataPacket.PACKET_SIZE);
     private final SerialPort serialPort;
 
-    private SerialPortReader(SerialPort serialPort) {
+    SerialPortReader(SerialPort serialPort) {
         this.serialPort = serialPort;
     }
 
@@ -28,8 +29,20 @@ class SerialPortReader implements SerialPortEventListener {
     public void serialEvent(SerialPortEvent event) {
         if (event.isRXCHAR()) {
             try {
-                byte[] buffer = serialPort.readBytes(event.getEventValue());
-                System.out.println(buffer);
+                byte[] buf = serialPort.readBytes(Math.min(event.getEventValue(), currBuffer.remaining()));
+                System.out.println(Arrays.asList(buf));
+                currBuffer.put(buf);
+                if(!currBuffer.hasRemaining()){
+                    // Read the data packet
+                    currBuffer.rewind();
+                    DataPacket nDP = DataPacket.fromBytes(currBuffer);
+                    
+                    // Reset the buffer.
+                    currBuffer.rewind();
+                    
+                    System.out.println(nDP.toString());
+                }
+                //System.out.println(buffer);
             } catch (SerialPortException ex) {
                 System.out.println(ex);
             }
