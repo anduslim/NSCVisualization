@@ -42,32 +42,31 @@ http://desandro.github.io/3dtransforms/docs/cube.html
   			background: #FFF;
 		}
 
-		#cube {
+		.cube {
 			width: 200px;
 			height: 200px;
 			transform-style: preserve-3d;
-			position: absolute;
-			left: 33%;
-			top: 33%;
+			margin: 100px auto 0;
 		}
 
-		#cube figure {
+		.cube figure {
 			width: 200px;
 			height: 200px;
 			display: block;
 			position: absolute;
 			border: 1px solid black;
 
-			font-size: 132pt;
+			font-size: 48px;
 			text-align: center;
+			color: rgba(0, 0, 0, 1);
 		}
 
-		#cube .front  { transform: rotateY(   0deg ) translateZ( 100px ); background: rgba(147,223,184, 0.8) }
-		#cube .back   { transform: rotateX( 180deg ) translateZ( 100px ); background: rgba(255,200,186, 0.8) }
-		#cube .right  { transform: rotateY(  90deg ) translateZ( 100px ); background: rgba(227,170,214, 0.8) }
-		#cube .left   { transform: rotateY( -90deg ) translateZ( 100px ); background: rgba(181,216,235, 0.8) }
-		#cube .top    { transform: rotateX(  90deg ) translateZ( 100px ); background: rgba(255,189,216, 0.8) }
-		#cube .bottom { transform: rotateX( -90deg ) translateZ( 100px ); background: rgba(255,252,221, 0.8) }
+		.cube .front  { transform: rotateY(   0deg ) translateZ( 100px ); background: rgba(147,223,184, 1);}
+		.cube .back   { transform: rotateX( 180deg ) translateZ( 100px ); background: rgba(255,200,186, 1) }
+		.cube .right  { transform: rotateY(  90deg ) translateZ( 100px ); background: rgba(227,170,214, 1) }
+		.cube .left   { transform: rotateY( -90deg ) translateZ( 100px ); background: rgba(181,216,235, 1) }
+		.cube .top    { transform: rotateX(  90deg ) translateZ( 100px ); background: rgba(255,189,216, 1) }
+		.cube .bottom { transform: rotateX( -90deg ) translateZ( 100px ); background: rgba(255,252,221, 1) }
 
 		/* Branding */
 		#branding {
@@ -88,6 +87,7 @@ http://desandro.github.io/3dtransforms/docs/cube.html
 			// EDIT THIS:
 			var nodeIds = [101, 102, 103];
 			var nodeNames = ["NSC1", "NSC2", "NSC3"];
+			var nodeDOM = null; // Leave null, will be populated automatically.
 
 
 			var chart;
@@ -140,14 +140,20 @@ http://desandro.github.io/3dtransforms/docs/cube.html
 						return;
 					}
 
-					$("#cube").transition({rotateY: _ay + 'rad', rotateZ: _az + 'rad'}, 0);
+					nodeDOM[idx].style.transform = 'rotateY(' + _ay + 'rad)rotateZ(' + _az + 'rad)';
 			    }
 			}
 			
 			$(function() {
 				$(document).ready(function() {
 
-					$('#cube figure').css({translateX:(($('#renderarea').width() - 200)/ 2)+'px'});
+					// Construct the 3d cubes
+					for (var i = 0; i < nodeIds.length; ++i){
+						$("#renderarea").append('<div class="cube"><figure class="front">' + nodeNames[i] + '</figure><figure class="back">' + nodeNames[i] + '</figure><figure class="right">' + nodeNames[i] + '</figure><figure class="left">' + nodeNames[i] + '</figure><figure class="top">' + nodeNames[i] + '</figure><figure class="bottom">' + nodeNames[i] + '</figure></div>');
+					}
+					nodeDOM = $("#renderarea").children('.cube');
+
+					$('.cube figure').css({translateX:(($('#renderarea').width() - 200)/ 2)+'px'});
 
 
 					var cSeries = [];
@@ -183,6 +189,7 @@ http://desandro.github.io/3dtransforms/docs/cube.html
 							title: {
 								text: 'Noise Level',
 							},
+							min: 0,
 						},
 						series: cSeries
 					});
@@ -205,7 +212,8 @@ http://desandro.github.io/3dtransforms/docs/cube.html
 
 		<div id="container"></div>
 		<div id="renderarea">
-			<div id="cube">
+			<!--
+			<div class="cube">
 				<figure class="front">1</figure>
 				<figure class="back">2</figure>
 				<figure class="right">3</figure>
@@ -213,6 +221,7 @@ http://desandro.github.io/3dtransforms/docs/cube.html
 				<figure class="top">5</figure>
 				<figure class="bottom">6</figure>
 			</div>
+			-->
 		</div>		
 		<div id="branding"><img src="sns-logo.svg" alt="snslogo"/></div>
 	</body>
