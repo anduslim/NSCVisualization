@@ -3,3 +3,4 @@ examples.desktop
 work
 
 /NSCDemoServer/build/
+#/NSCDemoServer/dist/
